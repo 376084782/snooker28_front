@@ -1,0 +1,90 @@
+
+zj_win1.png
+size: 1604,507
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+di2
+  rotate: false
+  xy: 1, 144
+  size: 1334, 362
+  orig: 1334, 384
+  offset: 0, 16
+  index: -1
+gy
+  rotate: false
+  xy: 1337, 250
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hei
+  rotate: true
+  xy: 1588, 115
+  size: 24, 15
+  orig: 24, 15
+  offset: 0, 0
+  index: -1
+jt1
+  rotate: true
+  xy: 747, 1
+  size: 141, 183
+  orig: 141, 183
+  offset: 0, 0
+  index: -1
+jt2
+  rotate: false
+  xy: 1521, 141
+  size: 81, 107
+  orig: 81, 107
+  offset: 0, 0
+  index: -1
+jt3
+  rotate: false
+  xy: 1062, 5
+  size: 103, 137
+  orig: 103, 137
+  offset: 0, 0
+  index: -1
+jt4
+  rotate: false
+  xy: 1167, 21
+  size: 91, 121
+  orig: 91, 121
+  offset: 0, 0
+  index: -1
+jt5
+  rotate: false
+  xy: 1521, 52
+  size: 65, 87
+  orig: 65, 87
+  offset: 0, 0
+  index: -1
+lizi
+  rotate: true
+  xy: 1337, 51
+  size: 197, 182
+  orig: 197, 182
+  offset: 0, 0
+  index: -1
+lizi2
+  rotate: false
+  xy: 932, 14
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+logo
+  rotate: false
+  xy: 1, 13
+  size: 430, 129
+  orig: 430, 129
+  offset: 0, 0
+  index: -1
+logo2
+  rotate: false
+  xy: 433, 41
+  size: 312, 101
+  orig: 312, 101
+  offset: 0, 0
+  index: -1

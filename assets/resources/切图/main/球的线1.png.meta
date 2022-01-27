@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.5",
+  "uuid": "e290866f-b5cf-4d76-bf12-feb52163c859",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 169,
+  "height": 16,
+  "platformSettings": {},
+  "subMetas": {
+    "球的线1": {
+      "ver": "1.0.4",
+      "uuid": "02b2c225-8bfc-4d64-84ef-f42bc9298d44",
+      "rawTextureUuid": "e290866f-b5cf-4d76-bf12-feb52163c859",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 169,
+      "height": 16,
+      "rawWidth": 169,
+      "rawHeight": 16,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

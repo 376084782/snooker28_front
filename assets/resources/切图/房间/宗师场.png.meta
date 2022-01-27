@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.5",
+  "uuid": "446aaa8e-6e52-4b2b-b1dd-6b0d5e55de87",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 384,
+  "height": 248,
+  "platformSettings": {},
+  "subMetas": {
+    "宗师场": {
+      "ver": "1.0.4",
+      "uuid": "79a7ca2b-6564-4675-ae71-aaa1850be4f7",
+      "rawTextureUuid": "446aaa8e-6e52-4b2b-b1dd-6b0d5e55de87",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 384,
+      "height": 248,
+      "rawWidth": 384,
+      "rawHeight": 248,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
