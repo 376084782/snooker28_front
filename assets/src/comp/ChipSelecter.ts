@@ -38,7 +38,7 @@ export default class ChipSelecter extends cc.Component {
     list.forEach((num, i) => {
       let isEnoungh = GameManager.selfInfo.coin >= num;
       let isBiggerThanNow = num > gameInfo.chip
-      let round = Math.floor(gameInfo.count / GameManager.listUser.length) + 1;
+      let round = gameInfo.round;
       console.log(i)
       let flagRound2 = round > 2 || (round <= 2 && i <= 1);
       console.log(flagRound2, 'flagRound2')

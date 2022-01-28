@@ -15,3 +15,4 @@ export default class PromiseUtil {
     }
 
 }
+window['PromiseUtil']=PromiseUtil

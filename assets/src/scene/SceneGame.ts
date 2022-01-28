@@ -68,7 +68,7 @@ export default class SceneGame extends cc.Component {
       })
     })
     this.btnPass.on(cc.Node.EventType.TOUCH_END, e => {
-      let round = Math.floor(GameManager.gameInfo.count / GameManager.listUser.length) + 1;
+      let round = GameManager.gameInfo.round;
       if (round <= 2) {
         return
       }
@@ -152,7 +152,7 @@ export default class SceneGame extends cc.Component {
       GameManager.selectedChip = chip
       this.btnPass.active = seatCurrent.isSelf
       this.btnCall.active = seatCurrent.isSelf
-      let round = Math.floor(GameManager.gameInfo.count / GameManager.listUser.length) + 1;
+      let round = GameManager.gameInfo.round;
       console.log(round, 'round')
       Utils.setGrey(round <= 2, this.btnPass.getComponent(cc.Sprite));
       this.btnAdd.node.active = seatCurrent.isSelf
@@ -246,15 +246,30 @@ export default class SceneGame extends cc.Component {
       }
       i = idx % listGain.length;
       let chip = sp.getComponent(Chip) as Chip;
+      console.log(i, listGain[i])
       let confGain = listGain[i];
-      confGain.gain -= chip.num;
-      this.showMoneyToSeat(confGain.uid, sp)
+      if (confGain) {
+        confGain.gain -= chip.num;
+        this.showMoneyToSeat(confGain.uid, sp)
+      }
     })
     await PromiseUtil.wait(.5);
     btnShowBall.active = selfWin && !this.flagBallShown;
-    PromiseUtil.wait(8).then(e => {
-      PopupManager.clearAllModal();
-      SceneNavigator.go('scene/game', { reconnect: true });
+    PromiseUtil.wait(8).then(async e => {
+      if (GameManager.selfInfo.coin < GameManager.config.min) {
+        await SceneNavigator.go('scene/room');
+        PromiseUtil.wait(.5).then(e => {
+          Utils.showToast('金币不足')
+        })
+      } else if (GameManager.selfInfo.coin > GameManager.config.max) {
+        await SceneNavigator.go('scene/room');
+        PromiseUtil.wait(.5).then(e => {
+          Utils.showToast('金币大于房间上限')
+        })
+      } else {
+        PopupManager.clearAllModal();
+        SceneNavigator.go('scene/game', { reconnect: true });
+      }
     })
     for (let uu in mapGain) {
       let ss = this.listUser.find((e: Seat) => e.info.uid == uu);
@@ -369,7 +384,7 @@ export default class SceneGame extends cc.Component {
     let config = GameManager.config
     this.txtRoom.string = `${config.name}  底分:${config.basicChip / 100}`
     this.txtTotal.string = '' + MathUtil.sum(gameInfo.deskList)
-    this.txtRound.string = `第${Math.floor(gameInfo.count / GameManager.listUser.length) + 1}/15轮`
+    this.txtRound.string = `第${GameManager.gameInfo.round}/15轮`
     this.btnAdd.initChipList(config.chipList)
 
     if (initAll) {

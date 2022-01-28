@@ -406,3 +406,4 @@ export default class Utils extends cc.Component {
   }
 }
 
+window['Utils'] = Utils 
