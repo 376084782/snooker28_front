@@ -1221,7 +1221,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 328,
+      "width": 305,
       "height": 32
     },
     "_anchorPoint": {
@@ -1276,9 +1276,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 34,
-      "g": 171,
-      "b": 132,
+      "r": 181,
+      "g": 245,
+      "b": 230,
       "a": 255
     },
     "_contentSize": {
@@ -1295,7 +1295,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -132.5,
+        -121,
         0,
         0,
         0,
@@ -1363,7 +1363,7 @@
       "__id__": 26
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 30
@@ -1467,9 +1467,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 34,
-      "g": 171,
-      "b": 132,
+      "r": 181,
+      "g": 245,
+      "b": 230,
       "a": 255
     },
     "_contentSize": {
@@ -1486,7 +1486,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -24,
+        -35.5,
         0,
         0,
         0,
@@ -1579,7 +1579,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        40,
+        28.5,
         0,
         0,
         0,
@@ -1622,9 +1622,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 34,
-      "g": 171,
-      "b": 132,
+      "r": 181,
+      "g": 245,
+      "b": 230,
       "a": 255
     },
     "_contentSize": {
@@ -1641,7 +1641,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        107,
+        95.5,
         0,
         0,
         0,
@@ -1711,7 +1711,7 @@
     "_enabled": true,
     "_layoutSize": {
       "__type__": "cc.Size",
-      "width": 328,
+      "width": 305,
       "height": 32
     },
     "_resize": 1,
@@ -12118,7 +12118,7 @@
   {
     "__type__": "cc.Node",
     "_name": "New Node",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 262
     },

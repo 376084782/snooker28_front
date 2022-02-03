@@ -212,14 +212,6 @@ export default class Utils extends cc.Component {
         // return this.setSpImgFromNet(container, addres);
       }
       this.flagLoadingImg = true;
-      // addres =
-      //   "http://ll-res.ll18.cn/gift/image/platform/bc1579d8-50d0-11eb-8915-0242ac120004.png!default.png";
-
-      addres = addres.replace("!default.png", "");
-      addres = addres.replace(
-        "http://paopao-files.xwab.cn/",
-        "http://ll-res.ll18.cn/"
-      );
       if (addres) {
         if (this.listImg[addres]) {
           container.spriteFrame = this.listImg[addres];
@@ -354,10 +346,7 @@ export default class Utils extends cc.Component {
   static doAjax({ url = "", data = {}, method = "get", noPop = false }) {
     method = method.toLowerCase();
     // 测试地址
-    // let host = "http://jiutousang.cn.utools.club";
-    // let host = "http://39.101.162.107:8091";
-    // let host = "http://39.105.44.205:7001";
-    let host = `http://${GameManager.ip}:9020`;
+    let host = GameManager.hostAjax;
     if (url.indexOf("http") == -1) {
       url = host + url;
     }

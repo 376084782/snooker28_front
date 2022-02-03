@@ -7,7 +7,6 @@ import PromiseUtil from "../../commonScripts/utils/PromiseUtil";
 import AudioPlayer from "../../commonScripts/core/AudioPlayer";
 
 export default class SocketManager {
-
   static get io() {
     return window["io"];
   }
@@ -20,108 +19,113 @@ export default class SocketManager {
   static async onMessage(res) {
     let type = res.type;
     let data = res.data;
-    console.log('收到协议', type, data);
+    console.log("收到协议", type, data);
     switch (type) {
       case "RECONNECT": {
-        console.log(data)
+        console.log(data);
         let dataGame = data.dataGame;
         if (dataGame.isInRoom) {
           this.setGameData(dataGame.gameInfo);
-          SceneNavigator.go('scene/game', { reconnect: true });
+          SceneNavigator.go("scene/game", { reconnect: true });
         } else {
-          SceneNavigator.go('scene/room');
+          SceneNavigator.go("scene/room");
         }
         break;
       }
-      case 'ROOM_USER_UPDATE': {
+      case "ROOM_USER_UPDATE": {
         GameManager.listUser = data.userList;
-        EventManager.emit('game/updateUserList')
-        break
+        EventManager.emit("game/updateUserList");
+        break;
       }
-      case 'GO_HALL': {
-        SceneNavigator.go('scene/room');
-        break
+      case "GO_HALL": {
+        SceneNavigator.go("scene/room");
+        break;
       }
-      case 'GO_GAME': {
+      case "GO_GAME": {
         this.setGameData(data.dataGame.gameInfo);
-        SceneNavigator.go('scene/game');
-        break
+        SceneNavigator.go("scene/game");
+        break;
       }
-      case 'BEFORE_START': {
-        EventManager.emit('game/showBeforeStart', data)
-        break
+      case "BEFORE_START": {
+        EventManager.emit("game/showBeforeStart", data);
+        break;
       }
-      case 'START_GAME': {
+      case "START_GAME": {
         this.setGameData(data.dataGame.gameInfo);
-        EventManager.emit('game/updateAll')
-        EventManager.emit('game/start', data);
-        break
+        EventManager.emit("game/updateAll");
+        EventManager.emit("game/start", data);
+        break;
       }
-      case 'ACTION': {
+      case "ACTION": {
         this.setGameData(data.dataGame.gameInfo);
-        EventManager.emit('game/updateAll')
+        EventManager.emit("game/updateAll");
         if (data.uid && data.type) {
-          EventManager.emit('game/showAction', data)
+          EventManager.emit("game/showAction", data);
         }
-        break
+        break;
       }
-      case 'POWER': {
-        EventManager.emit('game/showCurrent', data)
-        break
+      case "ACTION_SOUND": {
+        if (data.uid && data.type) {
+          EventManager.emit("game/showActionSound", data);
+        }
+        break;
       }
-      case 'THROW_MONEY': {
-        EventManager.emit('game/throwMoney', data)
-        break
+      case "POWER": {
+        EventManager.emit("game/showCurrent", data);
+        break;
       }
-      case 'GET_BALL': {
+      case "THROW_MONEY": {
+        EventManager.emit("game/throwMoney", data);
+        break;
+      }
+      case "GET_BALL": {
         let { uid, listNew } = data;
         let user = GameManager.listUser.find(e => e.uid == uid);
         user.ballList = listNew;
-        EventManager.emit('game/getBall', data)
-        break
+        EventManager.emit("game/getBall", data);
+        break;
       }
-      case 'FINISH': {
+      case "FINISH": {
         this.setGameData(data.dataGame.gameInfo);
-        EventManager.emit('game/finish', data.winner)
-        break
+        EventManager.emit("game/finish", data.winner);
+        break;
       }
-      case 'SHOW_BALLS': {
-        EventManager.emit('game/onShowBalls', data.winner)
-        break
+      case "SHOW_BALLS": {
+        EventManager.emit("game/onShowBalls", data.winner);
+        break;
       }
-      case 'GIVEUP': {
-        EventManager.emit('game/giveup', data)
-        break
+      case "GIVEUP": {
+        EventManager.emit("game/giveup", data);
+        break;
       }
-      case 'UPDATE_MONEY': {
-        EventManager.emit('game/updateMoney', data)
-        break
+      case "UPDATE_MONEY": {
+        EventManager.emit("game/updateMoney", data);
+        break;
       }
-      case 'ERROR': {
-        console.log(data)
-        Utils.showToast(data.data.msg)
-        break
+      case "ERROR": {
+        console.log(data);
+        Utils.showToast(data.data.msg);
+        break;
       }
     }
   }
   static setGameData(gameInfo) {
-    GameManager.gameInfo = gameInfo.gameInfo
+    GameManager.gameInfo = gameInfo.gameInfo;
     GameManager.step = gameInfo.step;
     GameManager.listUser = gameInfo.listUser;
     GameManager.level = +gameInfo.level;
     GameManager.config = gameInfo.config;
   }
   static async onConnect() {
-    console.log('ccc')
-    this.sendMessage("RECONNECT", {
-    });
+    console.log("ccc");
+    this.sendMessage("RECONNECT", {});
   }
 
   static sendMessage(type, data: any = {}) {
     this.socket.emit("message", {
       type,
       data,
-      uid: GameManager.uid,
+      uid: GameManager.uid
     });
   }
 
@@ -133,7 +137,7 @@ export default class SocketManager {
     if (this.socket) {
       return;
     }
-    let url = `ws://${GameManager.ip}:9021`;
+    let url = GameManager.hostWS;
     this.socket = this.io(url);
     this.listen();
   }

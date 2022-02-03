@@ -19,7 +19,6 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class SceneGame extends cc.Component {
-
   @property(cc.Prefab)
   prefabShowBall: cc.Prefab = null;
 
@@ -29,22 +28,20 @@ export default class SceneGame extends cc.Component {
   @property(cc.Prefab)
   prefabBall: cc.Prefab = null;
   hideBtns() {
-
-    this.btnPass.active = false
-    this.btnCall.active = false
-    this.btnAdd.node.active = false
-    this.btnGiveup.active = false
+    this.btnPass.active = false;
+    this.btnCall.active = false;
+    this.btnAdd.node.active = false;
+    this.btnGiveup.active = false;
   }
   protected onLoad(): void {
     this.txtWaiting2.node.active = false;
     this.ballTop.node.active = false;
-    this.hideBtns()
+    this.hideBtns();
   }
   start() {
     AudioPlayer.resumeAllMusic();
     this.setRoomInfo(true);
-    this.listen()
-
+    this.listen();
 
     // this.throwMoney(cc.v2(-100, 100), 1000)
 
@@ -52,161 +49,175 @@ export default class SceneGame extends cc.Component {
   }
   listen() {
     this.btnBack.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage('MATCH', { flag: false })
-    })
+      SocketManager.sendMessage("MATCH", { flag: false });
+    });
     this.btnRule.on(cc.Node.EventType.TOUCH_END, e => {
-      PopupManager.show('modal/modalRule')
-    })
+      PopupManager.show("modal/modalRule");
+    });
     this.btnReady.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage('READY', {
+      SocketManager.sendMessage("READY", {
         flag: !GameManager.selfInfo.ready
-      })
-    })
+      });
+    });
     this.btnGiveup.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage('ACTION', {
+      SocketManager.sendMessage("ACTION", {
         type: 4
-      })
-    })
+      });
+    });
     this.btnPass.on(cc.Node.EventType.TOUCH_END, e => {
       let round = GameManager.gameInfo.round;
       if (round <= 2) {
-        return
+        return;
       }
-      SocketManager.sendMessage('ACTION', {
-        type: 3, extraData: {
+      SocketManager.sendMessage("ACTION", {
+        type: 3,
+        extraData: {
           chip: GameManager.selectedChip
         }
-      })
-    })
+      });
+    });
     this.btnCall.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage('ACTION', {
-        type: 2, extraData: {
+      SocketManager.sendMessage("ACTION", {
+        type: 2,
+        extraData: {
           chip: GameManager.selectedChip
         }
-      })
-    })
-    EventManager.on('game/updateUserList', this.updateUserList, this);
-    EventManager.on('game/updateAll', this.setRoomInfo, this)
-    EventManager.on('game/start', this.onStartGame, this)
-    EventManager.on('game/throwMoney', this.doThrowMoney, this)
-    EventManager.on('game/getBall', this.getBall, this)
-    EventManager.on('game/finish', this.onFinish, this)
-    EventManager.on('game/onShowBalls', this.onShowBalls, this)
-    EventManager.on('game/showAction', this.onShowAction, this)
-    EventManager.on('game/showCurrent', this.showCurrent, this)
-    EventManager.on('game/updateSelChip', this.updateSelChip, this)
-    EventManager.on('game/giveup', this.showGiveup, this)
-    EventManager.on('game/showBeforeStart', this.showBeforeStart, this)
+      });
+    });
+    EventManager.on("game/updateUserList", this.updateUserList, this);
+    EventManager.on("game/updateAll", this.setRoomInfo, this);
+    EventManager.on("game/start", this.onStartGame, this);
+    EventManager.on("game/throwMoney", this.doThrowMoney, this);
+    EventManager.on("game/getBall", this.getBall, this);
+    EventManager.on("game/finish", this.onFinish, this);
+    EventManager.on("game/onShowBalls", this.onShowBalls, this);
+    EventManager.on("game/showAction", this.onShowAction, this);
+    EventManager.on("game/showActionSound", this.showActionSound, this);
+    EventManager.on("game/showCurrent", this.showCurrent, this);
+    EventManager.on("game/updateSelChip", this.updateSelChip, this);
+    EventManager.on("game/giveup", this.showGiveup, this);
+    EventManager.on("game/showBeforeStart", this.showBeforeStart, this);
   }
   showGiveup({ uid }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     seat.info.isLose = true;
     seat.updateTag();
   }
-  onShowAction({ uid, type, data, chipBefore }) {
+  showActionSound({ uid, type, data, chipBefore }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
-    if (seat) {
-      seat.showAction(type)
-    }
     if (type == 2 || type == 3) {
       if (data.chip > chipBefore) {
         // 加注
         if (data.chip == Math.max(...GameManager.config.chipList)) {
-          AudioPlayer.playEffectByUrl('音效/jiadaoding')
-          AudioPlayer.playEffectByUrl('音效/着火特效音效')
+          AudioPlayer.playEffectByUrl("音效/jiadaoding");
+          AudioPlayer.playEffectByUrl("音效/着火特效音效");
           this.aniFire.active = true;
-          seat.toggleFire(true)
+          seat.toggleFire(true);
           PromiseUtil.wait(2).then(e => {
             this.aniFire.active = false;
-            seat.toggleFire(false)
-          })
+            seat.toggleFire(false);
+          });
         } else {
-          AudioPlayer.playEffectByUrl('音效/jiazhu')
+          AudioPlayer.playEffectByUrl("音效/jiazhu");
         }
       } else {
         if (type == 2) {
           // 要球
-          AudioPlayer.playEffectByUrl('音效/yaoqiu')
+          AudioPlayer.playEffectByUrl("音效/yaoqiu");
         } else if (type == 3) {
           // 不要球
-          AudioPlayer.playEffectByUrl('音效/buyaoqiu')
+          AudioPlayer.playEffectByUrl("音效/buyaoqiu");
         } else if (type == 4) {
           // 放弃
-          AudioPlayer.playEffectByUrl('音效/fangqi')
+          AudioPlayer.playEffectByUrl("音效/fangqi");
         }
       }
     }
-    this.checkBtnHide()
+  }
+  onShowAction({ uid, type, data, chipBefore }) {
+    let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
+    if (seat) {
+      seat.showAction(type);
+    }
+    this.checkBtnHide();
   }
   checkBtnHide() {
-    if (GameManager.gameInfo.chip >= Math.max(...GameManager.config.chipList)
-      || GameManager.selfInfo.coin <= Math.min(...GameManager.config.chipList)) {
-      this.btnAdd.node.active = false
-      this.btnAdd.wrap.active = false
+    if (
+      GameManager.gameInfo.chip >= Math.max(...GameManager.config.chipList) ||
+      GameManager.selfInfo.coin <= Math.min(...GameManager.config.chipList)
+    ) {
+      this.btnAdd.node.active = false;
+      this.btnAdd.wrap.active = false;
     }
   }
   showCurrent({ currentSeat, timeEnd, chip }) {
-    let seatCurrent = this.listUser.find((e: Seat) => e.info.seat == currentSeat)
+    let seatCurrent = this.listUser.find(
+      (e: Seat) => e.info.seat == currentSeat
+    );
     if (seatCurrent) {
-      seatCurrent.showClock(timeEnd)
-      GameManager.selectedChip = chip
-      this.btnPass.active = seatCurrent.isSelf
-      this.btnCall.active = seatCurrent.isSelf
-      let round = GameManager.gameInfo.round;
-      console.log(round, 'round')
-      Utils.setGrey(round <= 2, this.btnPass.getComponent(cc.Sprite));
-      this.btnAdd.node.active = seatCurrent.isSelf
-      this.btnGiveup.active = seatCurrent.isSelf
-      this.checkBtnHide()
+      seatCurrent.showClock(timeEnd);
+      GameManager.selectedChip = chip;
+      this.btnPass.active = seatCurrent.isSelf;
+      this.btnCall.active = seatCurrent.isSelf;
 
-      let txt1 = this.btnPass.getChildByName('txt').getComponent(cc.Label);
-      let txt2 = this.btnCall.getChildByName('txt').getComponent(cc.Label);
+      let currentNumAll = GameManager.sum(GameManager.selfInfo.ballList);
+      Utils.setGrey(currentNumAll == 28, this.btnCall.getComponent(cc.Sprite));
+
+      let round = GameManager.gameInfo.round;
+      console.log(round, "round");
+      Utils.setGrey(round <= 2, this.btnPass.getComponent(cc.Sprite));
+      this.btnAdd.node.active = seatCurrent.isSelf;
+      this.btnGiveup.active = seatCurrent.isSelf;
+      this.checkBtnHide();
+
+      let txt1 = this.btnPass.getChildByName("txt").getComponent(cc.Label);
+      let txt2 = this.btnCall.getChildByName("txt").getComponent(cc.Label);
 
       if (GameManager.selfInfo.coin == 0) {
-        txt1.string = ''
-        txt2.string = ''
-
+        txt1.string = "";
+        txt2.string = "";
       } else if (chip >= GameManager.selfInfo.coin) {
-        txt1.string = 'all in'
-        txt2.string = 'all in'
+        txt1.string = "all in";
+        txt2.string = "all in";
       } else {
-        txt1.string = Utils.numberFormat(chip)
-        txt2.string = Utils.numberFormat(chip)
+        txt1.string = Utils.numberFormat(chip);
+        txt2.string = Utils.numberFormat(chip);
       }
-
     }
   }
   updateSelChip() {
-    let chip = GameManager.selectedChip
-    let txt1 = this.btnPass.getChildByName('txt').getComponent(cc.Label);
-    let txt2 = this.btnCall.getChildByName('txt').getComponent(cc.Label);
+    let chip = GameManager.selectedChip;
+    let txt1 = this.btnPass.getChildByName("txt").getComponent(cc.Label);
+    let txt2 = this.btnCall.getChildByName("txt").getComponent(cc.Label);
 
     if (GameManager.selfInfo.coin == 0) {
-      txt1.string = ''
-      txt2.string = ''
-
+      txt1.string = "";
+      txt2.string = "";
     } else if (chip >= GameManager.selfInfo.coin) {
-      txt1.string = 'all in'
-      txt2.string = 'all in'
+      txt1.string = "all in";
+      txt2.string = "all in";
     } else {
-      txt1.string = Utils.numberFormat(chip)
-      txt2.string = Utils.numberFormat(chip)
+      txt1.string = Utils.numberFormat(chip);
+      txt2.string = Utils.numberFormat(chip);
     }
-
   }
   showMoneyToSeat(uid, sp) {
-    let t = .35;
+    let t = 0.35;
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     if (seat) {
       let posEnd = seat.node.convertToWorldSpaceAR(cc.v2(0, 0));
       this.areaMoney.convertToNodeSpaceAR(posEnd, posEnd);
-      cc.tween(sp).to(t, {
-        x: posEnd.x, y: posEnd.y, scale: .3
-      }).call(e => {
-        sp.destroy()
-      }).start()
+      cc.tween(sp)
+        .to(t, {
+          x: posEnd.x,
+          y: posEnd.y,
+          scale: 0.3
+        })
+        .call(e => {
+          sp.destroy();
+        })
+        .start();
     }
-
   }
   async onShowBalls({ total, balls, uid }) {
     this.flagBallShown = true;
@@ -216,28 +227,27 @@ export default class SceneGame extends cc.Component {
     });
     this.scheduleOnce(async e => {
       if (GameManager.selfInfo.uid != uid) {
-        await PopupManager.show('modal/modalLoser', { list: balls, total })
+        await PopupManager.show("modal/modalLoser", { list: balls, total });
       }
-    }, 1)
-
+    }, 1);
   }
-  flagBallShown = false
+  flagBallShown = false;
   async onFinish({ total, balls, uid, mapGain }) {
-    let selfWin = GameManager.selfInfo.uid == uid
-    this.hideBtns()
+    let selfWin = GameManager.selfInfo.uid == uid;
+    this.hideBtns();
     let btnShowBall = cc.instantiate(this.prefabShowBall);
     btnShowBall.setParent(PopupManager.container || cc.Canvas.instance.node);
     // 显示在最上层
     btnShowBall.setSiblingIndex(cc.macro.MAX_ZINDEX);
     btnShowBall.on(cc.Node.EventType.TOUCH_END, e => {
       SocketManager.sendMessage("SHOW_BALLS", {});
-    })
+    });
     btnShowBall.active = false;
 
     // 翻牌
     let listGain = [];
     for (let uu in mapGain) {
-      listGain.push({ uid: uu, gain: mapGain[uu] })
+      listGain.push({ uid: uu, gain: mapGain[uu] });
     }
     this.areaMoney.children.forEach((sp, idx) => {
       let i = idx % listGain.length;
@@ -246,45 +256,46 @@ export default class SceneGame extends cc.Component {
       }
       i = idx % listGain.length;
       let chip = sp.getComponent(Chip) as Chip;
-      console.log(i, listGain[i])
+      console.log(i, listGain[i]);
       let confGain = listGain[i];
       if (confGain) {
         confGain.gain -= chip.num;
-        this.showMoneyToSeat(confGain.uid, sp)
+        this.showMoneyToSeat(confGain.uid, sp);
       }
-    })
-    await PromiseUtil.wait(.5);
+    });
+    await PromiseUtil.wait(0.5);
     btnShowBall.active = selfWin && !this.flagBallShown;
     PromiseUtil.wait(8).then(async e => {
       if (GameManager.selfInfo.coin < GameManager.config.min) {
-        await SceneNavigator.go('scene/room');
-        PromiseUtil.wait(.5).then(e => {
-          Utils.showToast('金币不足')
-        })
+        await SceneNavigator.go("scene/room");
+        PromiseUtil.wait(0.5).then(e => {
+          Utils.showToast("金币不足");
+        });
       } else if (GameManager.selfInfo.coin > GameManager.config.max) {
-        await SceneNavigator.go('scene/room');
-        PromiseUtil.wait(.5).then(e => {
-          Utils.showToast('金币大于房间上限')
-        })
+        await SceneNavigator.go("scene/room");
+        PromiseUtil.wait(0.5).then(e => {
+          Utils.showToast("金币大于房间上限");
+        });
       } else {
         PopupManager.clearAllModal();
-        SceneNavigator.go('scene/game', { reconnect: true });
+        SceneNavigator.go("scene/game", { reconnect: true });
       }
-    })
+    });
     for (let uu in mapGain) {
       let ss = this.listUser.find((e: Seat) => e.info.uid == uu);
-      ss.showWin(mapGain[uu], uu == uid)
+      ss.showWin(mapGain[uu], uu == uid);
     }
     await PromiseUtil.wait(2);
     if (selfWin) {
       AudioPlayer.pauseAllMusic();
-      AudioPlayer.playEffectByUrl('音效/胜利');
+      AudioPlayer.playEffectByUrl("音效/胜利");
       // 自己赢了，弹出
-      await PopupManager.show('modal/modalWin', {
-        num: mapGain[GameManager.selfInfo.uid], call() {
+      await PopupManager.show("modal/modalWin", {
+        num: mapGain[GameManager.selfInfo.uid],
+        call() {
           btnShowBall.setSiblingIndex(cc.macro.MAX_ZINDEX);
         }
-      })
+      });
     }
   }
   getBall({ ball, uid, listNew, ballLeft }) {
@@ -302,63 +313,75 @@ export default class SceneGame extends cc.Component {
         this.node.convertToNodeSpaceAR(posEnd, posEnd);
         cc.tween(sp)
           .set({
-            x: posStart.x, y: posStart.y
-          }).to(.3, {
-            x: posEnd.x, y: posEnd.y, scale: ballLast.node.scale
-          }).call(e => {
+            x: posStart.x,
+            y: posStart.y
+          })
+          .to(0.45, {
+            x: posEnd.x,
+            y: posEnd.y,
+            scale: ballLast.node.scale
+          })
+          .call(e => {
             sp.destroy();
             ctrSeat.renderNum(listNew);
-            this.ballTop.initBall(ballLeft)
-          }).start();
+            this.ballTop.initBall(ballLeft);
+          })
+          .start();
       }
     }
   }
   doThrowMoney({ uid, num }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     if (seat) {
-      let pos = seat.node.convertToWorldSpaceAR(cc.v2(0, 0))
-      this.throwMoney(num, true, pos)
+      let pos = seat.node.convertToWorldSpaceAR(cc.v2(0, 0));
+      this.throwMoney(num, true, pos);
     }
   }
   async onStartGame(data) {
     this.topQues.active = true;
     this.ballTop.node.active = false;
     // 第一轮发三个私有球
-    let ballQues = this.topQues.getChildByName('ball');
+    let ballQues = this.topQues.getChildByName("ball");
     let posStart = ballQues.convertToWorldSpaceAR(cc.v2(0, 0));
-    this.node.convertToNodeSpaceAR(posStart, posStart)
-    let timeAni = .35;
+    this.node.convertToNodeSpaceAR(posStart, posStart);
+    let timeAni = 0.35;
     GameManager.listUser.forEach((info, i) => {
-      let ctr = this.listUser.find((e: Seat) => e.info.uid == info.uid)
+      let ctr = this.listUser.find((e: Seat) => e.info.uid == info.uid);
       if (ctr) {
-        let endBall = ctr.listBall[0].node
-        let posEnd = endBall.convertToWorldSpaceAR(cc.v2(0, 0))
-        this.node.convertToNodeSpaceAR(posEnd, posEnd)
+        let endBall = ctr.listBall[0].node;
+        let posEnd = endBall.convertToWorldSpaceAR(cc.v2(0, 0));
+        this.node.convertToNodeSpaceAR(posEnd, posEnd);
         let ball = cc.instantiate(this.prefabBall);
         let ctrBall = ball.getComponent(Ball);
         ctrBall.num = 99;
         this.node.addChild(ball);
-        ctr.renderNum([])
+        ctr.renderNum([]);
 
         ctr.iconStatus.node.active = false;
-        cc.tween(ball).set({
-          x: posStart.x, y: posStart.y
-        }).delay(timeAni * i).to(timeAni, {
-          x: posEnd.x, y: posEnd.y,
-          scale: ctr.isSelf ? 1 : .8
-        }).call(e => {
-          ctr.renderNum(info.ballList)
-          ball.destroy()
-        }).start()
+        cc.tween(ball)
+          .set({
+            x: posStart.x,
+            y: posStart.y
+          })
+          .delay(timeAni * i)
+          .to(timeAni, {
+            x: posEnd.x,
+            y: posEnd.y,
+            scale: ctr.isSelf ? 1 : 0.8
+          })
+          .call(e => {
+            ctr.renderNum(info.ballList);
+            ball.destroy();
+          })
+          .start();
       }
-    })
+    });
     await PromiseUtil.wait(timeAni * 3);
     this.topQues.active = false;
     this.ballTop.node.active = true;
-    this.ballTop.playAnimate()
+    this.ballTop.playAnimate();
   }
-  onDisable(): void {
-  }
+  onDisable(): void {}
   @property(cc.Label)
   txtTotal: cc.Label = null;
   @property(cc.Label)
@@ -372,31 +395,35 @@ export default class SceneGame extends cc.Component {
   @property(cc.Node)
   btnReady: cc.Node = null;
   @property([Seat])
-  listUser: Seat[] = []
+  listUser: Seat[] = [];
 
   @property(cc.Node)
-  topQues: cc.Node = null
+  topQues: cc.Node = null;
 
   @property(AreaBallTop)
-  ballTop: AreaBallTop = null
+  ballTop: AreaBallTop = null;
   setRoomInfo(initAll?) {
     let gameInfo = GameManager.gameInfo;
-    let config = GameManager.config
-    this.txtRoom.string = `${config.name}  底分:${config.basicChip / 100}`
-    this.txtTotal.string = '' + MathUtil.sum(gameInfo.deskList)
-    this.txtRound.string = `第${GameManager.gameInfo.round}/15轮`
-    this.btnAdd.initChipList(config.chipList)
+    let config = GameManager.config;
+    this.txtRoom.string = `${config.name}  底分:${config.basicChip / 100}`;
+    this.txtTotal.string = "" + MathUtil.sum(gameInfo.deskList);
+    let round = GameManager.gameInfo.round;
+    if (round > 15) {
+      round = 15;
+    }
+    this.txtRound.string = `第${round}/15轮`;
+    this.btnAdd.initChipList(config.chipList);
 
     if (initAll) {
-      this.updateUserList()
+      this.updateUserList();
       this.listUser.forEach((seat: Seat) => {
-        seat.renderNum(seat.info.ballList || [])
-      })
+        seat.renderNum(seat.info.ballList || []);
+      });
       gameInfo.deskList.forEach(num => {
-        this.throwMoney(num, false)
+        this.throwMoney(num, false);
       });
       this.ballTop.node.active = true;
-      this.ballTop.initBall(gameInfo.ballLeft)
+      this.ballTop.initBall(gameInfo.ballLeft);
     }
 
     switch (GameManager.step) {
@@ -406,13 +433,13 @@ export default class SceneGame extends cc.Component {
         this.wrapReady.active = true;
         this.txtWaiting.node.active = GameManager.listUser.length < 3;
         this.txtWaiting.startTimer();
-        break
+        break;
       }
       case 1: {
         this.listUser.forEach((user: Seat) => {
           user.wrapBalls.active = true;
           user.wrapLine.active = true;
-        })
+        });
 
         // 已开始游戏
         this.wrapGame.active = true;
@@ -425,73 +452,78 @@ export default class SceneGame extends cc.Component {
               currentSeat: GameManager.gameInfo.currentSeat,
               timeEnd: GameManager.gameInfo.timeEnd,
               chip: GameManager.gameInfo.chip
-            })
+            });
           }
         }
-        break
+        break;
       }
       case 2: {
         // 准备开始阶段
         this.txtWaiting2.node.active = true;
         this.btnReady.active = false;
-        this.txtWaiting2.setStartTime(GameManager.gameInfo.timeStart)
+        this.txtWaiting2.setStartTime(GameManager.gameInfo.timeStart);
       }
     }
   }
   updateUserList() {
     for (let i = 0; i < 3; i++) {
       let seatS = GameManager.getSeatCS(i);
-      let info = GameManager.listUser.find(e => e.seat == seatS)
+      let info = GameManager.listUser.find(e => e.seat == seatS);
       let seat = this.listUser[i];
       if (info) {
         seat.node.active = true;
-        seat.setInfo(info)
+        seat.setInfo(info);
       } else {
         seat.node.active = false;
       }
     }
     this.txtWaiting.node.active = GameManager.listUser.length < 3;
-    let imgTxt = this.btnReady.getChildByName('txt').getComponent(cc.Sprite);
-    Utils.setSpImg(imgTxt, `切图/main/${GameManager.selfInfo.ready ? '取消准备' : '准备2'}`)
+    let imgTxt = this.btnReady.getChildByName("txt").getComponent(cc.Sprite);
+    Utils.setSpImg(
+      imgTxt,
+      `切图/main/${GameManager.selfInfo.ready ? "取消准备" : "准备2"}`
+    );
   }
 
   showBeforeStart({ timeStart }) {
     this.txtWaiting.node.active = false;
     this.btnReady.active = false;
     this.txtWaiting2.node.active = true;
-    this.txtWaiting2.setStartTime(timeStart)
+    this.txtWaiting2.setStartTime(timeStart);
   }
 
   @property(cc.Node)
   wrapReady: cc.Node = null;
   @property(txtWaiting)
-  txtWaiting: txtWaiting = null
+  txtWaiting: txtWaiting = null;
 
   @property(WaitingStart)
-  txtWaiting2: WaitingStart = null
+  txtWaiting2: WaitingStart = null;
 
   @property(cc.Node)
   wrapGame: cc.Node = null;
   @property(cc.Node)
-  areaMoney: cc.Node = null
+  areaMoney: cc.Node = null;
 
   @property(cc.Prefab)
-  prefabChip: cc.Prefab = null
+  prefabChip: cc.Prefab = null;
 
   // 动画-扔筹码
   throwMoney(num, withAni = true, posStart = cc.v2(0, 0)) {
-    let pos = this.areaMoney.convertToNodeSpaceAR(posStart)
+    let pos = this.areaMoney.convertToNodeSpaceAR(posStart);
     let sp = cc.instantiate(this.prefabChip);
     let ctr = sp.getComponent(Chip);
-    ctr.setData(num)
-
+    ctr.setData(num);
 
     let w = this.areaMoney.width;
     let h = this.areaMoney.height;
-    cc.tween(sp).set({ x: pos.x, y: pos.y }).to(withAni ? .4 : 0, {
-      x: MathUtil.getRandomInt(-w / 2, w / 2),
-      y: MathUtil.getRandomInt(-h / 2, h / 2),
-    }).start()
+    cc.tween(sp)
+      .set({ x: pos.x, y: pos.y })
+      .to(withAni ? 0.4 : 0, {
+        x: MathUtil.getRandomInt(-w / 2, w / 2),
+        y: MathUtil.getRandomInt(-h / 2, h / 2)
+      })
+      .start();
     this.areaMoney.addChild(sp);
   }
   // 放弃
@@ -506,5 +538,4 @@ export default class SceneGame extends cc.Component {
   // 要
   @property(cc.Node)
   btnCall: cc.Node = null;
-
 }
