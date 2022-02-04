@@ -1,0 +1,20 @@
+
+baodian.png
+size: 101,130
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+lizi
+  rotate: false
+  xy: 1, 38
+  size: 99, 91
+  orig: 99, 91
+  offset: 0, 0
+  index: -1
+zi
+  rotate: false
+  xy: 1, 1
+  size: 97, 35
+  orig: 97, 35
+  offset: 0, 0
+  index: -1
