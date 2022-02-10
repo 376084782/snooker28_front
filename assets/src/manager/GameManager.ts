@@ -77,8 +77,10 @@ export default class GameManager {
     });
   }
 
-  static hostAjax = "http://39.101.162.107:9020";
-  static hostWS = "ws://39.101.162.107:9021";
+  static hostAjax = "http://localhost:9020";
+  static hostWS = "ws://localhost:9021";
+  // static hostAjax = "http://39.101.162.107:9020";
+  // static hostWS = "ws://39.101.162.107:9021";
   // static ip = 'localhost'
   static getSumExpFirst(list: number[]) {
     let s = 0;
