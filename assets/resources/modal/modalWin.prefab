@@ -253,8 +253,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 2271.25,
-      "height": 1419.53
+      "width": 1334,
+      "height": 750
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -305,7 +305,7 @@
     ],
     "paused": false,
     "defaultSkin": "default",
-    "defaultAnimation": "win",
+    "defaultAnimation": "",
     "_preCacheMode": 0,
     "_cacheMode": 0,
     "loop": false,
@@ -316,13 +316,13 @@
     "_frameCache": null,
     "_curFrame": null,
     "_skeletonCache": null,
-    "_animationName": "win",
+    "_animationName": "chuxian",
     "_animationQueue": [],
     "_headAniInfo": null,
     "_playTimes": 1,
     "_isAniComplete": true,
     "_N$skeletonData": {
-      "__uuid__": "bb63e640-94bd-46ac-b3c6-47d32e837161"
+      "__uuid__": "600d0829-7fe7-4326-a2e8-db4993b8fcbd"
     },
     "_N$_defaultCacheMode": 0,
     "_N$debugSlots": false,

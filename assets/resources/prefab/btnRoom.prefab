@@ -100,7 +100,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 3
@@ -317,7 +317,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 9
@@ -336,7 +336,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 30.4,
+      "width": 11.12,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -388,8 +388,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "111",
-    "_N$string": "111",
+    "_string": "0",
+    "_N$string": "0",
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": true,

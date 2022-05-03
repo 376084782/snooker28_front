@@ -23,6 +23,9 @@ export default class SceneGame extends cc.Component {
   prefabShowBall: cc.Prefab = null;
 
   @property(cc.Node)
+  btnChangeDesk: cc.Node = null;
+
+  @property(cc.Node)
   aniFire: cc.Node = null;
 
   @property(cc.Prefab)
@@ -34,12 +37,20 @@ export default class SceneGame extends cc.Component {
     this.btnGiveup.active = false;
   }
   protected onLoad(): void {
+    this.aniWin.node.active = false;
+    this.shapeUnlink.active = false;
     this.txtWaiting2.node.active = false;
     this.ballTop.node.active = false;
+    this.btnShowBall.active = false;
     this.hideBtns();
   }
+  @property(cc.Node)
+  shapeUnlinked: cc.Node = null;
   start() {
+    this.updateShapeUnlink(!!GameManager.selfInfo.isDisConnected)
     AudioPlayer.resumeAllMusic();
+    this.wrapGame.active = false;
+    this.wrapReady.active = true;
     this.setRoomInfo(true);
     this.listen();
 
@@ -48,16 +59,24 @@ export default class SceneGame extends cc.Component {
     // PopupManager.show('modal/modalLoser',{total:10,list:[1,2,3,4]})
   }
   listen() {
+    this.btnChangeDesk.on(cc.Node.EventType.TOUCH_END, e => {
+      SocketManager.sendMessage("CHANGE_DESK", {
+        level: GameManager.level,
+        roomId: GameManager.roomId
+      });
+    });
+    this.btnShowBall.on(cc.Node.EventType.TOUCH_END, e => {
+      SocketManager.sendMessage("SHOW_BALLS", {});
+    });
     this.btnBack.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage("MATCH", { flag: false });
+      PopupManager.show('modal/modalExit', {
+        call() {
+          SocketManager.sendMessage("MATCH", { flag: false });
+        }
+      })
     });
     this.btnRule.on(cc.Node.EventType.TOUCH_END, e => {
       PopupManager.show("modal/modalRule");
-    });
-    this.btnReady.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage("READY", {
-        flag: !GameManager.selfInfo.ready
-      });
     });
     this.btnGiveup.on(cc.Node.EventType.TOUCH_END, e => {
       SocketManager.sendMessage("ACTION", {
@@ -77,6 +96,10 @@ export default class SceneGame extends cc.Component {
       });
     });
     this.btnCall.on(cc.Node.EventType.TOUCH_END, e => {
+      let btn = this.btnCall.getComponent(cc.Button)
+      if (!btn.interactable) {
+        return
+      }
       SocketManager.sendMessage("ACTION", {
         type: 2,
         extraData: {
@@ -84,6 +107,10 @@ export default class SceneGame extends cc.Component {
         }
       });
     });
+    this.shapeUnlinkBtn.on(cc.Node.EventType.TOUCH_END, e => {
+      location.href = 'uniwebview://close';
+    })
+    EventManager.on("game/updateShapeUnlink", this.updateShapeUnlink, this);
     EventManager.on("game/updateUserList", this.updateUserList, this);
     EventManager.on("game/updateAll", this.setRoomInfo, this);
     EventManager.on("game/start", this.onStartGame, this);
@@ -97,6 +124,38 @@ export default class SceneGame extends cc.Component {
     EventManager.on("game/updateSelChip", this.updateSelChip, this);
     EventManager.on("game/giveup", this.showGiveup, this);
     EventManager.on("game/showBeforeStart", this.showBeforeStart, this);
+    EventManager.on("game/showChat", this.showChat, this);
+    EventManager.on('game/showUnlink', this.showUnlink, this)
+
+    EventManager.on('game/hideFinishAni', this.hideFinishAni, this)
+
+
+  }
+  async hideFinishAni({ isContinue, msg }) {
+    if (isContinue) {
+      PopupManager.clearAllModal();
+      SceneNavigator.go("scene/game", { reconnect: true });
+    } else {
+      await SceneNavigator.go("scene/room");
+      PromiseUtil.wait(0.5).then(e => {
+        Utils.showToast(msg);
+      });
+    }
+  }
+  @property(cc.Node)
+  shapeUnlink: cc.Node = null;
+  @property(cc.Node)
+  shapeUnlinkBtn: cc.Node = null;
+  showUnlink() {
+    this.updateShapeUnlink(false)
+    this.shapeUnlink.active = true;
+  }
+  updateShapeUnlink(flag) {
+    this.shapeUnlinked.active = flag;
+  }
+  showChat({ uid, conf }) {
+    let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
+    seat.showChat(conf);
   }
   showGiveup({ uid }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
@@ -106,7 +165,10 @@ export default class SceneGame extends cc.Component {
   showActionSound({ uid, type, data, chipBefore }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     if (type == 2 || type == 3) {
-      if (data.chip > chipBefore) {
+      if (seat.info.coin <= data.chip) {
+        // allin
+        AudioPlayer.playEffectByUrl("音效/全下了");
+      } else if (data.chip > chipBefore) {
         // 加注
         if (data.chip == Math.max(...GameManager.config.chipList)) {
           AudioPlayer.playEffectByUrl("音效/jiadaoding");
@@ -118,25 +180,34 @@ export default class SceneGame extends cc.Component {
             seat.toggleFire(false);
           });
         } else {
-          AudioPlayer.playEffectByUrl("音效/jiazhu");
+          if (type == 2) {
+            // 要球
+            AudioPlayer.playEffectByUrl("音效/jiazhuyaoqiu");
+          } else if (type == 3) {
+            // 不要球
+            AudioPlayer.playEffectByUrl("音效/jiazhu");
+          }
         }
       } else {
         if (type == 2) {
           // 要球
-          AudioPlayer.playEffectByUrl("音效/yaoqiu");
+          AudioPlayer.playEffectByUrl(`音效/${GameManager.gameInfo.count == 0 && GameManager.gameInfo.round == 2 ? 'yaoqiu' : 'genzhuyaoqiu'}`);
         } else if (type == 3) {
           // 不要球
-          AudioPlayer.playEffectByUrl("音效/buyaoqiu");
-        } else if (type == 4) {
-          // 放弃
-          AudioPlayer.playEffectByUrl("音效/fangqi");
+          AudioPlayer.playEffectByUrl(`音效/${GameManager.gameInfo.count == 0 && GameManager.gameInfo.round == 2 ? 'buyaoqiu' : 'genzhu'}`);
         }
       }
+    } else if (type == 4) {
+      // 放弃
+      AudioPlayer.playEffectByUrl("音效/fangqi");
     }
   }
   onShowAction({ uid, type, data, chipBefore }) {
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     if (seat) {
+      if (data && data.chip > chipBefore) {
+        type = 1
+      }
       seat.showAction(type);
     }
     this.checkBtnHide();
@@ -155,34 +226,45 @@ export default class SceneGame extends cc.Component {
       (e: Seat) => e.info.seat == currentSeat
     );
     if (seatCurrent) {
-      seatCurrent.showClock(timeEnd);
-      GameManager.selectedChip = chip;
-      this.btnPass.active = seatCurrent.isSelf;
-      this.btnCall.active = seatCurrent.isSelf;
+      if (seatCurrent.isSelf) {
+        this.btnAdd.node.active = true;
+        this.btnGiveup.active = true;
+        this.btnPass.active = true;
+        this.btnCall.active = true;
+        seatCurrent.showClock(timeEnd);
+        GameManager.selectedChip = chip;
 
-      let currentNumAll = GameManager.sum(GameManager.selfInfo.ballList);
-      Utils.setGrey(currentNumAll == 28, this.btnCall.getComponent(cc.Sprite));
+        let currentNumAll = GameManager.sum(GameManager.selfInfo.ballList);
+        Utils.setGrey(currentNumAll == 28, this.btnCall.getComponent(cc.Sprite));
+        let btn = this.btnCall.getComponent(cc.Button);
+        btn.interactable = currentNumAll != 28
 
-      let round = GameManager.gameInfo.round;
-      console.log(round, "round");
-      Utils.setGrey(round <= 2, this.btnPass.getComponent(cc.Sprite));
-      this.btnAdd.node.active = seatCurrent.isSelf;
-      this.btnGiveup.active = seatCurrent.isSelf;
-      this.checkBtnHide();
+        let round = GameManager.gameInfo.round;
+        console.log(round, "round");
+        Utils.setGrey(round <= 2, this.btnPass.getComponent(cc.Sprite));
+        this.checkBtnHide();
 
-      let txt1 = this.btnPass.getChildByName("txt").getComponent(cc.Label);
-      let txt2 = this.btnCall.getChildByName("txt").getComponent(cc.Label);
+        let txt1 = this.btnPass.getChildByName("txt").getComponent(cc.Label);
+        let txt2 = this.btnCall.getChildByName("txt").getComponent(cc.Label);
 
-      if (GameManager.selfInfo.coin == 0) {
-        txt1.string = "";
-        txt2.string = "";
-      } else if (chip >= GameManager.selfInfo.coin) {
-        txt1.string = "all in";
-        txt2.string = "all in";
+        if (GameManager.selfInfo.coin == 0) {
+          txt1.string = "";
+          txt2.string = "";
+        } else if (chip >= GameManager.selfInfo.coin) {
+          txt1.string = "all in";
+          txt2.string = "all in";
+        } else {
+          txt1.string = Utils.numberFormat(chip);
+          txt2.string = Utils.numberFormat(chip);
+        }
       } else {
-        txt1.string = Utils.numberFormat(chip);
-        txt2.string = Utils.numberFormat(chip);
+        this.btnAdd.node.active = false;
+        this.btnGiveup.active = false;
+        this.btnPass.active = false;
+        this.btnCall.active = false;
       }
+    } else {
+      // 不在这局游戏里,不操作自己的按钮
     }
   }
   updateSelChip() {
@@ -205,6 +287,7 @@ export default class SceneGame extends cc.Component {
     let t = 0.35;
     let seat = this.listUser.find((e: Seat) => e.info.uid == uid);
     if (seat) {
+      AudioPlayer.playEffectByUrl("sound/金币到账");
       let posEnd = seat.node.convertToWorldSpaceAR(cc.v2(0, 0));
       this.areaMoney.convertToNodeSpaceAR(posEnd, posEnd);
       cc.tween(sp)
@@ -219,11 +302,25 @@ export default class SceneGame extends cc.Component {
         .start();
     }
   }
-  async onShowBalls({ total, balls, uid }) {
+  async onShowBalls({ winner, uidListShowBall }) {
+    let { total, balls, uid } = winner;
     this.flagBallShown = true;
+    let uidListSameMax = []
+    this.listUser.forEach((s: Seat) => {
+      let numTotal = MathUtil.sum(s.list)
+      if (numTotal == total) {
+        uidListSameMax.push(s.info.uid)
+      }
+    })
     this.listUser.forEach((s: Seat) => {
       s.clock.node.active = false;
-      s.showNum();
+      if (uidListShowBall.indexOf(s.info.uid) > -1) {
+        let showExtra = false;
+        if (uidListSameMax.length > 1 && uidListSameMax.indexOf(s.info.uid) > -1) {
+          showExtra = true
+        }
+        s.showNum(showExtra);
+      }
     });
     this.scheduleOnce(async e => {
       if (GameManager.selfInfo.uid != uid) {
@@ -235,16 +332,9 @@ export default class SceneGame extends cc.Component {
   async onFinish({ total, balls, uid, mapGain }) {
     let selfWin = GameManager.selfInfo.uid == uid;
     this.hideBtns();
-    let btnShowBall = cc.instantiate(this.prefabShowBall);
-    btnShowBall.setParent(PopupManager.container || cc.Canvas.instance.node);
-    // 显示在最上层
-    btnShowBall.setSiblingIndex(cc.macro.MAX_ZINDEX);
-    btnShowBall.on(cc.Node.EventType.TOUCH_END, e => {
-      SocketManager.sendMessage("SHOW_BALLS", {});
-    });
-    btnShowBall.active = false;
 
-    // 翻牌
+
+    // 筹码变成金币飞到对应的头像
     let listGain = [];
     for (let uu in mapGain) {
       listGain.push({ uid: uu, gain: mapGain[uu] });
@@ -256,7 +346,6 @@ export default class SceneGame extends cc.Component {
       }
       i = idx % listGain.length;
       let chip = sp.getComponent(Chip) as Chip;
-      console.log(i, listGain[i]);
       let confGain = listGain[i];
       if (confGain) {
         confGain.gain -= chip.num;
@@ -264,39 +353,28 @@ export default class SceneGame extends cc.Component {
       }
     });
     await PromiseUtil.wait(0.5);
-    btnShowBall.active = selfWin && !this.flagBallShown;
-    PromiseUtil.wait(8).then(async e => {
-      if (GameManager.selfInfo.coin < GameManager.config.min) {
-        await SceneNavigator.go("scene/room");
-        PromiseUtil.wait(0.5).then(e => {
-          Utils.showToast("金币不足");
-        });
-      } else if (GameManager.selfInfo.coin > GameManager.config.max) {
-        await SceneNavigator.go("scene/room");
-        PromiseUtil.wait(0.5).then(e => {
-          Utils.showToast("金币大于房间上限");
-        });
-      } else {
-        PopupManager.clearAllModal();
-        SceneNavigator.go("scene/game", { reconnect: true });
-      }
-    });
+    if (selfWin) {
+      this.playAniWin()
+      AudioPlayer.pauseAllMusic();
+      AudioPlayer.playEffectByUrl("音效/胜利");
+      this.btnShowBall.active = !this.flagBallShown;
+    }
     for (let uu in mapGain) {
       let ss = this.listUser.find((e: Seat) => e.info.uid == uu);
       ss.showWin(mapGain[uu], uu == uid);
     }
-    await PromiseUtil.wait(2);
-    if (selfWin) {
-      AudioPlayer.pauseAllMusic();
-      AudioPlayer.playEffectByUrl("音效/胜利");
-      // 自己赢了，弹出
-      await PopupManager.show("modal/modalWin", {
-        num: mapGain[GameManager.selfInfo.uid],
-        call() {
-          btnShowBall.setSiblingIndex(cc.macro.MAX_ZINDEX);
-        }
-      });
-    }
+  }
+  @property(cc.Node)
+  btnShowBall: cc.Node = null;
+  @property(sp.Skeleton)
+  aniWin: sp.Skeleton = null;
+  playAniWin() {
+    this.aniWin.node.active = true;
+    let track = this.aniWin.setAnimation(1, 'chuxian', false);
+    this.aniWin.setTrackCompleteListener(track, e => {
+      this.aniWin.clearTracks()
+      this.aniWin.setAnimation(2, 'xunhuan', true);
+    })
   }
   getBall({ ball, uid, listNew, ballLeft }) {
     let user = GameManager.listUser.find(e => e.uid == uid);
@@ -338,6 +416,7 @@ export default class SceneGame extends cc.Component {
     }
   }
   async onStartGame(data) {
+    this.btnChangeDesk.active = false;
     this.topQues.active = true;
     this.ballTop.node.active = false;
     // 第一轮发三个私有球
@@ -381,7 +460,7 @@ export default class SceneGame extends cc.Component {
     this.ballTop.node.active = true;
     this.ballTop.playAnimate();
   }
-  onDisable(): void {}
+  onDisable(): void { }
   @property(cc.Label)
   txtTotal: cc.Label = null;
   @property(cc.Label)
@@ -392,8 +471,6 @@ export default class SceneGame extends cc.Component {
   btnBack: cc.Node = null;
   @property(cc.Node)
   btnRule: cc.Node = null;
-  @property(cc.Node)
-  btnReady: cc.Node = null;
   @property([Seat])
   listUser: Seat[] = [];
 
@@ -426,46 +503,38 @@ export default class SceneGame extends cc.Component {
       this.ballTop.initBall(gameInfo.ballLeft);
     }
 
-    switch (GameManager.step) {
-      case 0: {
-        // 匹配阶段
-        this.wrapGame.active = false;
-        this.wrapReady.active = true;
-        this.txtWaiting.node.active = GameManager.listUser.length < 3;
-        this.txtWaiting.startTimer();
-        break;
-      }
-      case 1: {
-        this.listUser.forEach((user: Seat) => {
-          user.wrapBalls.active = true;
-          user.wrapLine.active = true;
-        });
+    if (GameManager.step == 0) {
+      // 匹配阶段
+      this.wrapGame.active = false;
+      this.wrapReady.active = true;
+    } else if (GameManager.step == 2) {
+      // 准备开始阶段
+      this.txtWaiting2.node.active = true;
+      this.txtWaiting2.setStartTime(GameManager.gameInfo.timeStart);
+    } else {
+      this.listUser.forEach((user: Seat) => {
+        user.wrapBalls.active = user.info.inGame;
+        user.wrapLine.active = user.info.inGame;
+      });
 
-        // 已开始游戏
-        this.wrapGame.active = true;
-        this.wrapReady.active = false;
-        this.topQues.active = false;
+      // 已开始游戏
+      this.wrapGame.active = true;
+      this.wrapReady.active = false;
+      this.topQues.active = false;
 
-        if (initAll) {
-          if (GameManager.gameInfo.currentSeat) {
-            this.showCurrent({
-              currentSeat: GameManager.gameInfo.currentSeat,
-              timeEnd: GameManager.gameInfo.timeEnd,
-              chip: GameManager.gameInfo.chip
-            });
-          }
+      if (initAll) {
+        if (GameManager.gameInfo.currentSeat) {
+          this.showCurrent({
+            currentSeat: GameManager.gameInfo.currentSeat,
+            timeEnd: GameManager.gameInfo.timeEnd,
+            chip: GameManager.gameInfo.chip
+          });
         }
-        break;
-      }
-      case 2: {
-        // 准备开始阶段
-        this.txtWaiting2.node.active = true;
-        this.btnReady.active = false;
-        this.txtWaiting2.setStartTime(GameManager.gameInfo.timeStart);
       }
     }
   }
   updateUserList() {
+    this.updateShapeUnlink(!!GameManager.selfInfo.isDisConnected)
     for (let i = 0; i < 3; i++) {
       let seatS = GameManager.getSeatCS(i);
       let info = GameManager.listUser.find(e => e.seat == seatS);
@@ -477,25 +546,15 @@ export default class SceneGame extends cc.Component {
         seat.node.active = false;
       }
     }
-    this.txtWaiting.node.active = GameManager.listUser.length < 3;
-    let imgTxt = this.btnReady.getChildByName("txt").getComponent(cc.Sprite);
-    Utils.setSpImg(
-      imgTxt,
-      `切图/main/${GameManager.selfInfo.ready ? "取消准备" : "准备2"}`
-    );
   }
 
   showBeforeStart({ timeStart }) {
-    this.txtWaiting.node.active = false;
-    this.btnReady.active = false;
     this.txtWaiting2.node.active = true;
     this.txtWaiting2.setStartTime(timeStart);
   }
 
   @property(cc.Node)
   wrapReady: cc.Node = null;
-  @property(txtWaiting)
-  txtWaiting: txtWaiting = null;
 
   @property(WaitingStart)
   txtWaiting2: WaitingStart = null;

@@ -270,3 +270,5 @@ export default class AudioPlayer {
     this.setMasterVolume(0.0);
   }
 }
+
+window['AudioPlayer'] = AudioPlayer

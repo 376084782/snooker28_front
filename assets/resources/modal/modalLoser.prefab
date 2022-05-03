@@ -369,7 +369,7 @@
     ],
     "paused": false,
     "defaultSkin": "default",
-    "defaultAnimation": "win",
+    "defaultAnimation": "",
     "_preCacheMode": 0,
     "_cacheMode": 0,
     "loop": false,

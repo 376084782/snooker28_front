@@ -1,4 +1,3 @@
-import PopupManager from "../../commonScripts/core/PopupManager";
 import MathUtil from "../../commonScripts/utils/MathUtil";
 import Utils from "../../commonScripts/utils/Utils";
 
@@ -76,11 +75,17 @@ export default class GameManager {
       }
     });
   }
+  static mapAvatar = {}
+  // static hostAjax = "http://localhost:9025";
+  // static hostWS = "ws://localhost:9026";
+  // static hostAjax = "http://192.168.10.105:9020";
+  // static hostWS = "ws://192.168.10.105:9021";
 
-  static hostAjax = "http://localhost:9020";
-  static hostWS = "ws://localhost:9021";
-  // static hostAjax = "http://39.101.162.107:9020";
-  // static hostWS = "ws://39.101.162.107:9021";
+  static hostAjax = "http://39.101.162.107:9020";
+  static hostWS = "ws://39.101.162.107:9021";
+
+  // static hostAjax = "http://212.129.234.189:9020";
+  // static hostWS = "ws://212.129.234.189:9021";
   // static ip = 'localhost'
   static getSumExpFirst(list: number[]) {
     let s = 0;
@@ -98,6 +103,7 @@ export default class GameManager {
     });
     return s;
   }
+  static roomId = 0;
   static config: any = {};
   static gameInfo: any = {};
   static listUser = [];

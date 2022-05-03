@@ -25,6 +25,9 @@ export default class Chip extends cc.Component {
     setData(num) {
         this.num = +num
         let i = GameManager.config.chipList.indexOf(num);
+        if (i == -1) {
+            i = 0;
+        }
         let map = [2, 4, 6, 20, 40]
         Utils.setSpImg(this.bg, `切图/main/筹码${map[i]}万`)
         this.txt.font = this.fntList[i]

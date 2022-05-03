@@ -56,12 +56,12 @@ export class PopupBase<Options = any> extends cc.Component
   /**
    * 弹窗已完全展示（子类请重写此函数以实现自定义逻辑）
    */
-  onShow(): void {}
+  onShow(): void { }
 
   /**
    * 弹窗已完全隐藏（子类请重写此函数以实现自定义逻辑）
    */
-  onHide(): void {}
+  onHide(): void { }
 
   /**
    * 展示弹窗
@@ -118,7 +118,9 @@ export class PopupBase<Options = any> extends cc.Component
    * 隐藏弹窗
    */
   public hide(): void {
+    console.log(2)
     if (!this.node) {
+      console.log(1)
       this.finishCallback && this.finishCallback();
       return;
     }
@@ -172,13 +174,13 @@ export class PopupBase<Options = any> extends cc.Component
   /**
    * 初始化（子类请重写此函数以实现自定义逻辑）
    */
-  init(options: Options): void {}
+  init(options: Options): void { }
 
   /**
    * 更新样式（子类请重写此函数以实现自定义样式）
    * @param options 弹窗选项
    */
-  updateDisplay(options: Options): void {}
+  updateDisplay(options: Options): void { }
 
   /**
    * 设置弹窗完成回调（该回调为 PopupManager 专用）

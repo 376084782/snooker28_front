@@ -1107,7 +1107,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "benkqnu9BLJ6AU2RQf2Q0h",
+    "fileId": "e51In61ENEq7xtryECpVeH",
     "sync": false
   },
   {
@@ -1216,7 +1216,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "7ck7eTcLhNjpDxsnk9aAyF",
+    "fileId": "0eMNWuX1JIOLFyq696t+AZ",
     "sync": false
   },
   {
@@ -1325,7 +1325,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "24dqBFCX5DW7bHcBhae/TK",
+    "fileId": "68i/H/M9VI07mfH+WQp0Om",
     "sync": false
   },
   {
@@ -1434,7 +1434,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "4bPuVl1tZN8oSclFpClQ9X",
+    "fileId": "afBJGlW6pP/LfoHa3E7T9a",
     "sync": false
   },
   {
@@ -1543,7 +1543,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "a1/rR+mStFI5lwqlij12Ae",
+    "fileId": "c3x3Zu/xpN15aPI0Vvnipb",
     "sync": false
   },
   {
@@ -1626,8 +1626,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-15）。这个球",
-    "_N$string": "游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-15）。这个球",
+    "_string": "游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-10）。这个球",
+    "_N$string": "游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-10）。这个球",
     "_fontSize": 27,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -1652,7 +1652,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "99ujAxHR1KNKoPIYVWfwkz",
+    "fileId": "2a6zbAxm1LZpA53L6pUDDf",
     "sync": false
   },
   {
@@ -1761,7 +1761,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "6bUJHYeEJCQqjkWRGaiad9",
+    "fileId": "2fxw6fO6dBZIbmk3LSiGeT",
     "sync": false
   },
   {
@@ -1870,7 +1870,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "38jZVXmopI9JzMM4XhFdN7",
+    "fileId": "2dADh4jaZKzp5vnyU8UGzS",
     "sync": false
   },
   {
@@ -1979,7 +1979,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "bbXdDXtStB9q8KfINsdUhI",
+    "fileId": "90+pfcAF1M+rKuBS8HaYzm",
     "sync": false
   },
   {
@@ -2088,7 +2088,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "0dkeac99NMV6gi/fr0AHQb",
+    "fileId": "a2gYxCC8NAG4EcfCZfE+nB",
     "sync": false
   },
   {
@@ -2197,7 +2197,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "adWgUHiohJx73O2RFkQeby",
+    "fileId": "21WggnIYBFCZlpHsYA2JhQ",
     "sync": false
   },
   {
@@ -2306,7 +2306,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "2au7AhExFNDpdX5rps7zhl",
+    "fileId": "abT8Ej3GZIEqSckvpd6UpT",
     "sync": false
   },
   {
@@ -2415,7 +2415,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "43/4fPZBJJHramD18fnSHN",
+    "fileId": "b2f0l71GVIIY5s68UBbU6q",
     "sync": false
   },
   {
@@ -2524,7 +2524,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "34ACH/8+ZKFY/AvnruBG/G",
+    "fileId": "a4jC/ZITRK84GUcK7S8IES",
     "sync": false
   },
   {
@@ -2633,7 +2633,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "1dApDkYB5HKYKNSEk/vYVb",
+    "fileId": "b9vRqOCB9EqLk/l3AA0C6G",
     "sync": false
   },
   {
@@ -2742,7 +2742,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "575iqT9TZKPLAHK9VhfrJ0",
+    "fileId": "9dYi5yDHJDo5fzBPoxIkfn",
     "sync": false
   },
   {
@@ -2851,7 +2851,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "c5WPstDKlNfaqNGFk0/b0E",
+    "fileId": "9b17q+qbFP4rn4VfTFu/eP",
     "sync": false
   },
   {
@@ -2960,7 +2960,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "9aGu3ruBdE5YHJa0okV0WX",
+    "fileId": "3ftfFJZUhHI5kdmikN/DaC",
     "sync": false
   },
   {
@@ -3069,7 +3069,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "ce5Ul8w69PZLIZQkZ7TIET",
+    "fileId": "3eVCx9UYBAfa/pu3LZfUcf",
     "sync": false
   },
   {
@@ -3178,7 +3178,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "e2yNnMUPFDaZOaU9VmUIIZ",
+    "fileId": "7bVf4SKFRCDLvrbocI2aGh",
     "sync": false
   },
   {
@@ -3287,7 +3287,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "4axxd7CxJGFZmqJ6mEPiLB",
+    "fileId": "8cx3+q9WBJCpzLZHLD8iBK",
     "sync": false
   },
   {
@@ -3396,7 +3396,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "3ajkY4ACBA3LUBIJT2/UUJ",
+    "fileId": "f8DYGMEI9HCJKwtX+7iAX/",
     "sync": false
   },
   {
@@ -3505,7 +3505,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "fbiqXbq35GraYpI8zXqwKd",
+    "fileId": "2dn2E/NMhC+5qoRg98qKZm",
     "sync": false
   },
   {
@@ -3614,7 +3614,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "70hDVO6hZOP60JJX/0WVr4",
+    "fileId": "8fNqZG3wxGi7tuYMF/AWut",
     "sync": false
   },
   {
@@ -3723,7 +3723,7 @@
     "asset": {
       "__uuid__": "4a37dd57-78cd-4cec-aad4-f11a73d12b63"
     },
-    "fileId": "66oazUzGBOnbxZ/WSQheXo",
+    "fileId": "0dV4ewMwtLwIE3rIBcWhwn",
     "sync": false
   },
   {
@@ -3736,7 +3736,7 @@
     "_enabled": true,
     "_fontFamily": "Arial",
     "_isSystemFontUsed": true,
-    "_N$string": "<color=#c12c0a>基本规则：</c>\n在幸运28游戏当中，根据每个玩家手中拥有的球的点数和来定输赢。如果每个玩家的点数和不相同，则看谁的点数在不超过28的情况下最接近28。注意，如果超过28点，则会爆掉。\n<color=#c12c0a>游戏流程：</c>\n游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-15）。这个球的点数只有你自己能看到。随后，就开始下注。每轮下注时，你可以选择要球或者不要球（每个球点数为1-15），而且，你后来要的球是公开的，每个人都可见。\n系统随机选择1位玩家进行首次下注，不同房间下注金额不同，第一位玩家下注后，其他玩家可以跟注或者加注。第一轮下注默认会获得一个公开球，第二轮开始后会让玩家选择是否需要公开球或者放弃。\n<color=#c12c0a>胜负判定规则：</c>\n注意，当爆点发生时，会有两种情况：\n1）公开球爆点，则直接判负\n2）公开球没有爆点，但所有球加起来爆点，仍然可以下注。结束时，如果存在爆点的和没爆点的，则没爆点的胜。如果大家都爆点了，则球数多的胜，如果球数也相同，则单个球点数大的胜。\n如果没有爆点，而且玩家的点数相同，则比较哪个人拥有的球数多，球数多的获胜。\n如果点数、球数都相同，则比较公开球的单个最大点数，单个点数最大的获胜。\n<color=#c12c0a>allin强开规则：</c>\n当房间内其他玩家allin，只剩下一名玩家没有allin时，这一轮会马上结束开球。请注意其他玩家的剩余金币和加注金额，把控好要球的节奏。",
+    "_N$string": "<color=#c12c0a>基本规则：</c>\n在幸运28游戏当中，根据每个玩家手中拥有的球的点数和来定输赢。如果每个玩家的点数和不相同，则看谁的点数在不超过28的情况下最接近28。注意，如果超过28点，则会爆掉。\n<color=#c12c0a>游戏流程：</c>\n游戏开始后，每个玩家都会被随机分配一个私有球（点数为1-10）。这个球的点数只有你自己能看到。随后，就开始下注。每轮下注时，你可以选择要球或者不要球（每个球点数为1-15），而且，你后来要的球是公开的，每个人都可见。\n系统随机选择1位玩家进行首次下注，不同房间下注金额不同，第一位玩家下注后，其他玩家可以跟注或者加注。第一轮下注默认会获得一个公开球，第二轮开始后会让玩家选择是否需要公开球或者放弃。\n<color=#c12c0a>胜负判定规则：</c>\n注意，当爆点发生时，会有两种情况：\n1）公开球爆点，则直接判负\n2）公开球没有爆点，但所有球加起来爆点，仍然可以下注。结束时，如果存在爆点的和没爆点的，则没爆点的胜。如果大家都爆点了，则球数多的胜，如果球数也相同，则单个球点数大的胜。\n如果没有爆点，而且玩家的点数相同，则比较哪个人拥有的球数多，球数多的获胜。\n如果点数、球数都相同，则比较公开球的单个最大点数，单个点数最大的获胜。\n<color=#c12c0a>allin强开规则：</c>\n当房间内其他玩家allin，只剩下一名玩家没有allin时，这一轮会马上结束开球。请注意其他玩家的剩余金币和加注金额，把控好要球的节奏。",
     "_N$horizontalAlign": 0,
     "_N$fontSize": 27,
     "_N$font": null,

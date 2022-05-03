@@ -10,11 +10,14 @@ export default class SceneLoading extends cc.Component {
   @property(Progress)
   prg: Progress = null;
   start() {
+
+
+
     cc.assetManager.getBundle("resources").loadDir(
       "/",
       (finish, total) => {
         let prg = finish / total;
-        this.prg.progress=prg;
+        this.prg.progress = prg;
         this.prg.setTxt(`游戏加载中...${Math.floor(prg * 100)}%`)
       },
       async e => {

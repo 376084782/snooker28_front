@@ -13,9 +13,8 @@ export default class FrameAnimatePlayer extends cc.Component {
 
   @property(cc.Float)
   interval: number = 1 / 10;
-  get listSp() {
-    return this.res.getSpriteFrames();
-  }
+
+  listSp:cc.SpriteFrame[]=[]
   // LIFE-CYCLE CALLBACKS:
 
   // onLoad () {}

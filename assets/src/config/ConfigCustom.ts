@@ -1,7 +1,129 @@
 export default class ConfigCustom {
-    static posHole = [
-        [-168.429, 94], [151.531, 94],
-        [-319.067, 6.031], [4.396, 6.031], [317.35, 6.031],
-        [-164.926, -81.549], [153.866, -81.549],
-        [-323.738, -170.297], [0.893, -170.297], [317.35, -170.297]]
+    static chatMsgList = [
+        {
+            msg: '这运气也忒好了！',
+            audio: '音效/这运气也忒好了'
+        },
+        {
+            msg: '快点吧我等到花都谢了！',
+            audio: '音效/huaduoxiele'
+        }, {
+            msg: '被我看穿了吧！',
+            audio: '音效/kanchuan'
+        }, {
+            msg: '亲，不要偷鸡噢！',
+            audio: '音效/touji'
+        }, {
+            msg: '冲动是魔鬼，冷静冷静！',
+            audio: '音效/lengjing'
+        }, {
+            msg: '不要走，决战到天亮！',
+            audio: '音效/buyaozou'
+        }, {
+            msg: '我是28点，你敢跟吗？',
+            audio: '音效/28dian'
+        }, {
+            msg: '勇敢搏一搏，单车变摩托',
+            audio: '音效/motuo'
+        }, {
+            msg: '狭路相逢勇者胜',
+            audio: '音效/yongzhe'
+        }, {
+            msg: '天大地大我最大，你强他强我最强！',
+            audio: '音效/tianda'
+        }, {
+            msg: '一点小钱，那都不是事儿',
+            audio: '音效/yidianxiaoqian'
+        }]
+    static emojiList = [{
+        url: 'face/zaijian',
+        audio: ''
+    }, {
+        url: 'face/bang',
+        audio: '音效/眨眼点赞'
+    }, {
+        url: 'face/bishi',
+        audio: ''
+    }, {
+        url: 'face/daku',
+        audio: '音效/惊讶流泪'
+    }, {
+        url: 'face/deyi',
+        audio: '音效/墨镜'
+    }, {
+        url: 'face/emo',
+        audio: '音效/怒'
+    }, {
+        url: 'face/fanu',
+        audio: ''
+    }, {
+        url: 'face/haixiu',
+        audio: ''
+    }, {
+        url: 'face/han',
+        audio: '音效/尴尬噘嘴'
+    }, {
+        url: 'face/hanxiao',
+        audio: ''
+    }, {
+        url: 'face/haqian',
+        audio: ''
+    }, {
+        url: 'face/jingkong',
+        audio: ''
+    }, {
+        url: 'face/kanren',
+        audio: ''
+    }, {
+        url: 'face/keai',
+        audio: '音效/笑'
+    }, {
+        url: 'face/kelian',
+        audio: '音效/委屈可怜'
+    }, {
+        url: 'face/ku',
+        audio: ''
+    }, {
+        url: 'face/outu',
+        audio: ''
+    }, {
+        url: 'face/qidao',
+        audio: ''
+    }, {
+        url: 'face/qinqin',
+        audio: ''
+    }, {
+        url: 'face/se',
+        audio: '音效/花痴'
+    }, {
+        url: 'face/shaoxiang',
+        audio: ''
+    }, {
+        url: 'face/shuai',
+        audio: ''
+    }, {
+        url: 'face/tiaopi',
+        audio: ''
+    }, {
+        url: 'face/touxiao',
+        audio: ''
+    }, {
+        url: 'face/xinsui',
+        audio: ''
+    }, {
+        url: 'face/ye',
+        audio: '音效/比耶'
+    }, {
+        url: 'face/yinxiao',
+        audio: '音效/奸笑'
+    }, {
+        url: 'face/yun',
+        audio: ''
+    }, {
+        url: 'face/zhuakuang',
+        audio: ''
+    }, {
+        url: 'face/ziya',
+        audio: ''
+    }]
 }

@@ -1,4 +1,6 @@
 import AudioPlayer from "../../commonScripts/core/AudioPlayer";
+import PopupManager from "../../commonScripts/core/PopupManager";
+import FrameAnimatePlayer from "../../commonScripts/FrameAnimatePlayer";
 import MathUtil from "../../commonScripts/utils/MathUtil";
 import PromiseUtil from "../../commonScripts/utils/PromiseUtil";
 import Utils from "../../commonScripts/utils/Utils";
@@ -27,12 +29,20 @@ export default class Seat extends cc.Component {
   coin: cc.Label = null;
   info: any = {};
 
+  @property(cc.Node)
+  nodeUnlink: cc.Node = null;
+
   @property(Clock)
   clock: Clock = null;
+
+  @property(cc.Node)
+  btnChangeDesk: cc.Node = null;
 
   @property(cc.Integer)
   seat: number = 0;
 
+  @property(cc.Sprite)
+  bg: cc.Sprite = null;
   get isSelf() {
     return this.seat == 0;
   }
@@ -41,6 +51,8 @@ export default class Seat extends cc.Component {
   }
   hideAll() {
     this.hideWin()
+    this.txtTotal.node.active = this.isSelf;
+    this.wrapExtraAnnounce.active = false;
     this.aniBao.node.active = false;
     this.aniFire.node.active = false;
     this.shape.node.active = false;
@@ -48,6 +60,11 @@ export default class Seat extends cc.Component {
     this.tagBao.node.active = false;
     this.clock.node.active = false;
     this.iconStatus.node.active = false
+    this.tagWatching.node.active = false
+    if (this.btnChangeDesk) {
+      this.btnChangeDesk.active = false
+    }
+    this.tagFirst.node.active = false
     if (this.isSelf) {
 
     } else {
@@ -59,25 +76,63 @@ export default class Seat extends cc.Component {
   }
   start() {
     this.txtWinStartY = this.txtWin.node.y
-
+    this.spBubble.active = false;
+    this.spEmoji.active = false;
+    this.nodeUnlink.active = false;
     // this.showWin(1000)
     // this.showTag()
 
     // this.showTagAdd()
+    this.bg.node.on(cc.Node.EventType.TOUCH_END, e => {
+      PopupManager.show('modal/modalInfo', this.info)
+    })
   }
-  setInfo(info: any) {
+  loadingAvatar = false
+  async setInfo(info: any) {
     this.info = info;
+    console.log(info, GameManager.step)
     if (!info) {
       this.node.active = false;
     } else {
       this.node.active = true;
       this.nickname.string = info.nickname;
-      this.coin.string = Utils.numberFormat(info.coin, 2)
       Utils.setSpImgFromNet(this.avatar, info.avatar);
-      if (GameManager.step == 0) {
-        if (!this.isSelf) {
-          this.iconStatus.node.active = info.ready;
-          Utils.setSpImg(this.iconStatus, '切图/main/准备')
+      this.nodeUnlink.active = !!info.isDisConnected;
+      this.coin.string = Utils.numberFormat(info.coin, 2)
+
+      if (!GameManager.mapAvatar[info.uid] && !this.loadingAvatar) {
+        this.loadingAvatar = true
+        // 获取头像
+        let data: any = await Utils.doAjax({
+          url: '/avatar', data: { uid: info.uid }, method: 'get'
+        })
+        GameManager.mapAvatar[info.uid] = data
+        this.loadingAvatar = false
+      }
+      let dataAvatar = GameManager.mapAvatar[info.uid]
+      if (dataAvatar.src.headimg) {
+        let img = 'data:image/jpg;base64,' + dataAvatar.src.headimg
+        Utils.setSpImgFromNet(this.avatar, img);
+        this.info.avatar = img
+      }
+
+      if (GameManager.step == 1 && !info.inGame) {
+        this.hideAll()
+        this.tagWatching.node.active = true
+        if (this.btnChangeDesk) {
+          this.btnChangeDesk.active = true
+        }
+      } else {
+        this.tagWatching.node.active = false
+        if (this.btnChangeDesk) {
+          this.btnChangeDesk.active = GameManager.step != 1
+        }
+        this.tagFirst.node.active = GameManager.gameInfo.firstSeat == info.seat
+        if (GameManager.step == 0) {
+          if (!this.isSelf) {
+            this.iconStatus.node.active = info.ready;
+            Utils.setSpImg(this.iconStatus, '切图/main/准备')
+          }
         }
       }
     }
@@ -125,6 +180,12 @@ export default class Seat extends cc.Component {
     }
   }
   @property(cc.Sprite)
+  tagFirst: cc.Sprite = null;
+  @property(cc.Sprite)
+  tagWatching: cc.Sprite = null;
+
+
+  @property(cc.Sprite)
   tag: cc.Sprite = null;
 
   @property(sp.Skeleton)
@@ -133,12 +194,21 @@ export default class Seat extends cc.Component {
   prefabBall: cc.Prefab = null;
   @property([Ball])
   listBall: Ball[] = []
+
   @property(cc.Label)
   txtCount: cc.Label = null;
-  @property(cc.Sprite)
-  iconStatus: cc.Sprite = null;
+  @property(cc.Label)
+  txtNum: cc.Label = null;
+  @property(cc.Node)
+  wrapExtraAnnounce: cc.Node = null;
+  @property(Ball)
+  maxBall: Ball = null;
   @property(cc.Label)
   txtTotal: cc.Label = null;
+
+  @property(cc.Sprite)
+  iconStatus: cc.Sprite = null;
+
 
   endTime = 0;
   showClock(endTime) {
@@ -149,13 +219,16 @@ export default class Seat extends cc.Component {
   protected update(dt: number): void {
     let txt = this.clock.node.getChildByName('文字').getComponent(cc.Label);
     let t = Math.floor((this.endTime - new Date().getTime()) / 1000)
+    if (t < 0) {
+      t = 0
+    }
     txt.string = ('000' + t).slice(-2)
   }
   showAction(type) {
     this.clock.node.active = false;
     let map = {
       1: '加注2',
-      2: GameManager.gameInfo.count == 1 ? '下注要求' : '跟注要求',
+      2: GameManager.gameInfo.count == 1 && GameManager.gameInfo.round == 2 ? '下注要求' : '跟注要求',
       3: '跟注2'
     }
     if (map[type]) {
@@ -170,16 +243,20 @@ export default class Seat extends cc.Component {
   @property(cc.Node)
   wrapLine: cc.Node = null
   list = []
-  async showNum() {
+  async showNum(showExtra) {
     // 翻球动画
-    if (!this.isSelf) {
+    if (!this.isSelf && !this.isBallShowed) {
+      this.isBallShowed = true;
       this.lightBall.node.active = true;
       this.lightBall.setToSetupPose();
       this.lightBall.setAnimation(1, 'guangdian', false);
       await PromiseUtil.wait(.3)
       this.renderNum(this.list, true)
+      this.txtTotal.node.active = true;
+      this.wrapExtraAnnounce.active = showExtra;
     }
   }
+  isBallShowed = false;
   renderNum(list: number[], showNum = false) {
     this.list = list;
     let l = [].concat(list)
@@ -207,6 +284,19 @@ export default class Seat extends cc.Component {
     if (this.txtTotal) {
       this.txtTotal.string = `总点数：${MathUtil.sum(list)}点`
     }
+    if (this.txtNum) {
+      this.txtNum.string = `总球数：${list.length}`
+    }
+    if (this.maxBall) {
+      if (list[1]) {
+        this.maxBall.node.active = true
+        this.maxBall.num = Math.max(...list.slice(1, list.length))
+      }
+      else {
+        this.maxBall.node.active = false
+      }
+    }
+
     l.forEach((num, i) => {
       let ball = this.listBall[i];
       if (ball) {
@@ -231,5 +321,34 @@ export default class Seat extends cc.Component {
     } else {
       this.tag.node.active = false;
     }
+  }
+
+
+  @property(cc.Node)
+  spBubble: cc.Node = null;
+
+  @property(cc.Node)
+  spEmoji: cc.Node = null;
+  async showChat({ type, conf }) {
+    if (type == 1) {
+      this.spBubble.active = true;
+      let txt = this.spBubble.getChildByName('txt').getComponent(cc.Label);
+      txt.string = conf.msg;
+    } else if (type == 2) {
+      this.spEmoji.active = true;
+      let list = await Utils.load(conf.url, cc.SpriteAtlas) as cc.SpriteAtlas;
+      let player = this.spEmoji.getComponent(FrameAnimatePlayer)
+      player.listSp = list.getSpriteFrames();
+      player.play()
+    }
+    if (conf.audio) {
+      AudioPlayer.playEffectByUrl(conf.audio)
+    }
+    this.unschedule(this.autoHideChat);
+    this.scheduleOnce(this.autoHideChat, 3)
+  }
+  autoHideChat() {
+    this.spBubble.active = false;
+    this.spEmoji.active = false;
   }
 }
