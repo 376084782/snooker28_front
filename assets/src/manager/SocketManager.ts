@@ -276,10 +276,10 @@ export default class SocketManager {
     clearInterval(this.timerRetry)
     this.countRetry = 0;
     clearInterval(this.ticker);
-    EventManager.emit('game/updateShapeUnlink', false)
     this.ticker = setInterval(e => {
       this.tickerHeart();
     }, 1000)
+    EventManager.emit('game/updateShapeUnlink', false)
     this.sendMessage("RECONNECT", {
       session_key: Utils.getQueryVariable('session_key'),
       client_id: Utils.getQueryVariable('client_id'),
