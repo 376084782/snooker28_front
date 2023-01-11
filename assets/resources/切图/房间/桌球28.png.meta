@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.5",
+  "uuid": "b0686909-4664-4a9d-a0fa-46b927e62aad",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 159,
+  "height": 50,
+  "platformSettings": {},
+  "subMetas": {
+    "桌球28": {
+      "ver": "1.0.4",
+      "uuid": "3224ef6e-a5a5-4953-87ee-8cb2247a9d1d",
+      "rawTextureUuid": "b0686909-4664-4a9d-a0fa-46b927e62aad",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 159,
+      "height": 50,
+      "rawWidth": 159,
+      "rawHeight": 50,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

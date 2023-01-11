@@ -81,11 +81,11 @@ export default class GameManager {
   // static hostAjax = "http://192.168.10.105:9020";
   // static hostWS = "ws://192.168.10.105:9021";
 
-  static hostAjax = "http://39.101.162.107:9020";
-  static hostWS = "ws://39.101.162.107:9021";
+  // static hostAjax = "http://39.101.162.107:9020";
+  // static hostWS = "ws://39.101.162.107:9021";
 
-  // static hostAjax = "http://212.129.234.189:9020";
-  // static hostWS = "ws://212.129.234.189:9021";
+  static hostAjax = "http://101.34.81.154:9301";
+  static hostWS = "ws://101.34.81.154:9302";
   // static ip = 'localhost'
   static getSumExpFirst(list: number[]) {
     let s = 0;
